@@ -16,8 +16,8 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  role          Role           @default(PROVIDER)
-  refreshTokens RefreshToken[]
+  role         Role          @default(PROVIDER)
+  refreshToken RefreshToken?
 }
 
 enum Role {
