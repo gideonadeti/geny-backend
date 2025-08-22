@@ -1,14 +1,14 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "apps/geny-backend/src",
+  "sourceRoot": "apps/api-gateway/src",
   "compilerOptions": {
     "deleteOutDir": true,
     "webpack": true,
-    "tsConfigPath": "apps/geny-backend/tsconfig.app.json"
+    "tsConfigPath": "apps/api-gateway/tsconfig.app.json"
   },
   "monorepo": true,
-  "root": "apps/geny-backend",
+  "root": "apps/api-gateway",
   "projects": {
     "api-gateway": {
       "type": "application",
@@ -17,15 +17,6 @@
       "sourceRoot": "apps/api-gateway/src",
       "compilerOptions": {
         "tsConfigPath": "apps/api-gateway/tsconfig.app.json"
-      }
-    },
-    "geny-backend": {
-      "type": "application",
-      "root": "apps/geny-backend",
-      "entryFile": "main",
-      "sourceRoot": "apps/geny-backend/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/geny-backend/tsconfig.app.json"
       }
     }
   }
