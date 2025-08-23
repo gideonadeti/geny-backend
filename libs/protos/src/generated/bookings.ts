@@ -43,10 +43,24 @@ export interface Booking {
 
 export interface FindAllRequest {
   userId: string;
+  isPast?: boolean | undefined;
+  sortBy?: string | undefined;
+  order?: string | undefined;
+  limit?: number | undefined;
+  page?: number | undefined;
 }
 
 export interface FindAllResponse {
   bookings: Booking[];
+  meta: Meta | undefined;
+}
+
+export interface Meta {
+  total: number;
+  currentPage: number;
+  lastPage: number;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
 }
 
 export interface FindOneRequest {
