@@ -15,7 +15,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     super({ usernameField: 'email' });
   }
 
-  private readonly logger = new Logger(LocalStrategy.name);
+  private logger = new Logger(LocalStrategy.name);
 
   async validate(email: string, password: string) {
     try {
