@@ -16,8 +16,6 @@ message CreateRequest {
   ServiceType service_type = 4;
   google.protobuf.Timestamp starts_at = 5;
   optional string notes = 6;
-  google.protobuf.Timestamp created_at = 7;
-  google.protobuf.Timestamp updated_at = 8;
 }
 
 enum ServiceType {

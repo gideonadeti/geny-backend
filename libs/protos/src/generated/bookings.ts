@@ -25,8 +25,6 @@ export interface CreateRequest {
   serviceType: ServiceType;
   startsAt: Date | undefined;
   notes?: string | undefined;
-  createdAt: Date | undefined;
-  updatedAt: Date | undefined;
 }
 
 export interface Booking {
