@@ -5,5 +5,23 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env("BOOKINGS_DATABASE_URL")
+}
+
+model Booking {
+  id          String      @id @default(uuid())
+  userId      String
+  clientName  String
+  clientPhone String
+  serviceType ServiceType
+  startsAt    DateTime
+  notes       String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+enum ServiceType {
+  MANICURE
+  PEDICURE
+  HAIRCUT
 }
