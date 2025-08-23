@@ -38,7 +38,7 @@ export class BookingsService {
   }
 
   async findAll(findAllRequest: FindAllRequest) {
-    const { userId, isPast, sortBy, order, limit, page } = findAllRequest;
+    const { userId, isPast, limit, page } = findAllRequest;
 
     try {
       if (!page && !limit) {
@@ -51,7 +51,6 @@ export class BookingsService {
               },
             }),
           },
-          orderBy: { [sortBy || 'createdAt']: order || 'desc' },
         });
 
         return {
@@ -83,7 +82,6 @@ export class BookingsService {
             },
           }),
         },
-        orderBy: { [sortBy || 'createdAt']: order || 'desc' },
         skip: (numberPage - 1) * numberLimit,
         take: numberLimit,
       });

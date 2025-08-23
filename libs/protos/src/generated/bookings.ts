@@ -44,8 +44,6 @@ export interface Booking {
 export interface FindAllRequest {
   userId: string;
   isPast?: boolean | undefined;
-  sortBy?: string | undefined;
-  order?: string | undefined;
   limit?: number | undefined;
   page?: number | undefined;
 }
