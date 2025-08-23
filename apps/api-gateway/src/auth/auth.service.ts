@@ -7,6 +7,7 @@ import {
   Injectable,
   InternalServerErrorException,
   Logger,
+  OnModuleInit,
 } from '@nestjs/common';
 
 import { AuthRequest, GrpcError, MicroserviceError } from '@app/interfaces';
@@ -28,7 +29,7 @@ const REFRESH_COOKIE_OPTIONS: CookieOptions = {
 };
 
 @Injectable()
-export class AuthService {
+export class AuthService implements OnModuleInit {
   constructor(@Inject(AUTH_PACKAGE_NAME) private authClient: ClientGrpc) {}
 
   private authService: AuthServiceClient;
