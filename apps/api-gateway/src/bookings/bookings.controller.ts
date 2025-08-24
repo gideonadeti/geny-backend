@@ -28,8 +28,6 @@ export class BookingsController {
 
   @Get()
   findAll(@UserId() userId: string, @Query() query: FindAllBookingsDto) {
-    console.log('query', query);
-
     return this.bookingsService.findAll(userId, query);
   }
 
