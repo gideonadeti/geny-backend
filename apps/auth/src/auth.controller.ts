@@ -8,6 +8,7 @@ import {
   SignOutRequest,
   SignUpRequest,
   User,
+  ValidateTokenRequest,
   ValidateUserRequest,
 } from '@app/protos/generated/auth';
 
@@ -38,5 +39,10 @@ export class AuthController {
   @GrpcMethod(AUTH_SERVICE_NAME)
   signOut(data: SignOutRequest) {
     return this.authService.signOut(data);
+  }
+
+  @GrpcMethod(AUTH_SERVICE_NAME)
+  validateToken(data: ValidateTokenRequest) {
+    return this.authService.validateToken(data);
   }
 }

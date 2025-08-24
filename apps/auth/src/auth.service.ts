@@ -13,6 +13,7 @@ import {
   SignUpRequest,
   User,
   UserRole,
+  ValidateTokenRequest,
   ValidateUserRequest,
 } from '@app/protos/generated/auth';
 
@@ -167,6 +168,18 @@ export class AuthService {
       });
     } catch (error) {
       this.handleError(error, 'sign out');
+    }
+  }
+
+  validateToken({ token }: ValidateTokenRequest) {
+    try {
+      const payload = this.jwtService.verify<AuthPayload>(token, {
+        secret: this.configService.get('JWT_ACCESS_SECRET'),
+      });
+
+      return { sub: payload.sub };
+    } catch (error) {
+      this.handleError(error, 'validate token');
     }
   }
 }
