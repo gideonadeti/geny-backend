@@ -17,9 +17,6 @@ const bootstrap = async () => {
       whitelist: true,
       forbidNonWhitelisted: true,
       transform: true,
-      transformOptions: {
-        enableImplicitConversion: true,
-      },
     }),
   );
 
