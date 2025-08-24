@@ -14,9 +14,13 @@ import { CreateBookingDto } from './dtos/create-booking.dto';
 import { FindAllBookingsDto } from './dtos/find-all-bookings.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { UserId } from '../auth/decorators/user-id.decorator';
+import { RolesGuard } from '../guards/roles.guard';
+import { UserRole } from '@app/protos/generated/auth';
+import { Roles } from '../decorators/roles.decorator';
 
 @ApiBearerAuth()
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(UserRole.PROVIDER)
 @Controller('bookings')
 export class BookingsController {
   constructor(private readonly bookingsService: BookingsService) {}
