@@ -8,6 +8,7 @@ import {
   InternalServerErrorException,
   Logger,
   OnModuleInit,
+  UnauthorizedException,
 } from '@nestjs/common';
 
 import { AuthRequest, GrpcError, MicroserviceError } from '@app/interfaces';
@@ -51,6 +52,10 @@ export class AuthService implements OnModuleInit {
       microserviceError.code === 'P2002'
     ) {
       throw new ConflictException('Email already exists');
+    }
+
+    if (microserviceError.name === 'UnauthorizedException') {
+      throw new UnauthorizedException(microserviceError.message);
     }
 
     throw new InternalServerErrorException(`Failed to ${action}`);
