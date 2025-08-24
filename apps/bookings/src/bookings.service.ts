@@ -1,17 +1,17 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
+import { Queue } from 'bullmq';
+import { InjectQueue } from '@nestjs/bullmq';
 
 import { PrismaService } from './prisma/prisma.service';
-import { ServiceType as PrismaServiceType } from '../generated/prisma';
-import {
-  CreateRequest,
-  FindAllRequest,
-  ServiceType,
-} from '@app/protos/generated/bookings';
+import { CreateRequest, FindAllRequest } from '@app/protos/generated/bookings';
 
 @Injectable()
 export class BookingsService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(
+    private prismaService: PrismaService,
+    @InjectQueue('bookings') private bookingsQueue: Queue,
+  ) {}
 
   private logger = new Logger(BookingsService.name);
 
@@ -23,15 +23,9 @@ export class BookingsService {
 
   async create(createRequest: CreateRequest) {
     try {
-      return await this.prismaService.booking.create({
-        data: {
-          ...createRequest,
-          serviceType: ServiceType[
-            createRequest.serviceType
-          ] as PrismaServiceType,
-          startsAt: createRequest.startsAt as Date,
-        },
-      });
+      const job = await this.bookingsQueue.add('create', { createRequest });
+
+      return { jobId: job.id };
     } catch (error) {
       this.handleError(error, 'create booking');
     }
