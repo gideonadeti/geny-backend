@@ -1,8 +1,24 @@
 import { NestFactory } from '@nestjs/core';
-import { BookingsModule } from './bookings.module';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { join } from 'path';
 
-async function bootstrap() {
-  const app = await NestFactory.create(BookingsModule);
-  await app.listen(process.env.port ?? 3000);
-}
-bootstrap();
+import { BookingsModule } from './bookings.module';
+import { BOOKINGS_PACKAGE_NAME } from '@app/protos/generated/bookings';
+
+const bootstrap = async () => {
+  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
+    BookingsModule,
+    {
+      transport: Transport.GRPC,
+      options: {
+        package: BOOKINGS_PACKAGE_NAME,
+        protoPath: join(__dirname, '../../libs/protos/bookings.proto'),
+        url: '0.0.0.0:5001',
+      },
+    },
+  );
+
+  await app.listen();
+};
+
+void bootstrap();
