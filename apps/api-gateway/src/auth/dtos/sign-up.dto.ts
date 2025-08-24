@@ -5,23 +5,23 @@ export class SignUpDto {
    * User's name
    * @example "John Doe"
    */
-  @IsString()
   @IsNotEmpty()
+  @IsString()
   name: string;
 
   /**
    * User's email
    * @example johndoe@gmail.com
    */
-  @IsEmail()
   @IsNotEmpty()
+  @IsEmail()
   email: string;
 
   /**
    * User's password
    * @example strongPassword
    */
-  @IsString()
   @IsNotEmpty()
+  @IsString()
   password: string;
 }

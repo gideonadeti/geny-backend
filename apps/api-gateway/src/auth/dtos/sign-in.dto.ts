@@ -5,15 +5,15 @@ export class SignInDto {
    * User's email
    * @example "johndoe@gmail.com"
    */
-  @IsEmail()
   @IsNotEmpty()
+  @IsEmail()
   email: string;
 
   /**
    * User's password
    * @example "strongPassword"
    */
-  @IsString()
   @IsNotEmpty()
+  @IsString()
   password: string;
 }
