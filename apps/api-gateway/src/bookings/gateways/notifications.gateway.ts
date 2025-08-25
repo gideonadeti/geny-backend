@@ -78,12 +78,6 @@ export class NotificationsGateway
 
       this.userSocketMap.set(user.sub, client.id);
       this.logger.log(`User with id ${user.sub} connected`);
-
-      const mapValues = Array.from(this.userSocketMap.entries());
-
-      this.logger.debug(
-        `Current user-socket map: ${JSON.stringify(mapValues)}`,
-      );
     } catch (error) {
       this.logger.error(
         `Failed to authenticate client with id ${client.id}`,
@@ -106,13 +100,6 @@ export class NotificationsGateway
 
   emitToUser(userId: string, event: string, payload: any) {
     const socketId = this.userSocketMap.get(userId);
-
-    this.logger.log(`Emitting event ${event} to user with id ${userId}`);
-    this.logger.log(`Socket id: ${socketId}`);
-
-    const mapValues = Array.from(this.userSocketMap.entries());
-
-    this.logger.debug(`Current user-socket map: ${JSON.stringify(mapValues)}`);
 
     if (socketId) {
       this.server.to(socketId).emit(event, payload);
