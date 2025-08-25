@@ -1,6 +1,7 @@
 import * as cookieParser from 'cookie-parser';
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import {
   DocumentBuilder,
   SwaggerDocumentOptions,
@@ -11,6 +12,14 @@ import { ApiGatewayModule } from './api-gateway.module';
 
 const bootstrap = async () => {
   const app = await NestFactory.create(ApiGatewayModule);
+
+  app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.REDIS,
+    options: {
+      host: 'localhost',
+      port: 6379,
+    },
+  });
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -39,6 +48,7 @@ const bootstrap = async () => {
 
   SwaggerModule.setup('/api-gateway/documentation', app, documentFactory);
 
+  await app.startAllMicroservices();
   await app.listen(process.env.PORT ?? 3000);
 };
 
