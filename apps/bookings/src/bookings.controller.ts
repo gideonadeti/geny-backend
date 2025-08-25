@@ -23,8 +23,8 @@ export class BookingsController {
     return this.bookingsService.findOne(data.id);
   }
 
-  @EventPattern('booking.started')
-  handleBookingStarted(data: CreateBookingData) {
-    return this.bookingsService.handleBookingStarted(data);
+  @EventPattern('create-booking')
+  handleCreateBooking(data: CreateBookingData) {
+    return this.bookingsService.handleCreateBooking(data);
   }
 }

@@ -52,7 +52,7 @@ export class BookingsService implements OnModuleInit {
 
   create(userId: string, createBookingDto: CreateBookingDto) {
     try {
-      this.bookingsAsyncClient.emit('booking.started', {
+      this.bookingsAsyncClient.emit('create-booking', {
         ...createBookingDto,
         userId,
         serviceType: ServiceType[createBookingDto.serviceType],
@@ -109,7 +109,7 @@ export class BookingsService implements OnModuleInit {
     }
   }
 
-  handleBookingCompleted(data: Booking) {
+  handleCreateBookingCompleted(data: Booking) {
     this.notificationsGateway.emitToUser(
       data.userId,
       'booking.completed',

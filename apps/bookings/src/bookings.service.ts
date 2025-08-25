@@ -102,7 +102,7 @@ export class BookingsService {
     }
   }
 
-  async handleBookingStarted(data: CreateBookingData) {
+  async handleCreateBooking(data: CreateBookingData) {
     try {
       const booking = await this.prismaService.booking.create({
         data: {
@@ -111,7 +111,7 @@ export class BookingsService {
         },
       });
 
-      this.apiGatewayClient.emit('booking.completed', booking);
+      this.apiGatewayClient.emit('create-booking-completed', booking);
     } catch (error) {
       this.handleError(error, 'handle booking started event');
     }

@@ -44,8 +44,8 @@ export class BookingsController {
   }
 
   @Public()
-  @EventPattern('booking.completed')
-  handleBookingCompleted(data: Booking) {
-    return this.bookingsService.handleBookingCompleted(data);
+  @EventPattern('create-booking-completed')
+  handleCreateBookingCompleted(data: Booking) {
+    return this.bookingsService.handleCreateBookingCompleted(data);
   }
 }
