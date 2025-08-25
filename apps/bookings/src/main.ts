@@ -6,7 +6,7 @@ import { BookingsModule } from './bookings.module';
 import { BOOKINGS_PACKAGE_NAME } from '@app/protos/generated/bookings';
 
 const bootstrap = async () => {
-  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
+  const gRpcApp = await NestFactory.createMicroservice<MicroserviceOptions>(
     BookingsModule,
     {
       transport: Transport.GRPC,
@@ -18,7 +18,18 @@ const bootstrap = async () => {
     },
   );
 
-  await app.listen();
+  const redisApp = await NestFactory.createMicroservice<MicroserviceOptions>(
+    BookingsModule,
+    {
+      transport: Transport.REDIS,
+      options: {
+        host: 'localhost',
+        port: 6379,
+      },
+    },
+  );
+
+  await Promise.all([gRpcApp.listen(), redisApp.listen()]);
 };
 
 void bootstrap();
