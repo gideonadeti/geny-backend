@@ -1,4 +1,4 @@
-import { ClientGrpc } from '@nestjs/microservices';
+import { ClientGrpc, ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 import {
   Inject,
@@ -12,7 +12,9 @@ import {
 import { CreateBookingDto } from './dtos/create-booking.dto';
 import { GrpcError, MicroserviceError } from '@app/interfaces';
 import { FindAllBookingsDto } from './dtos/find-all-bookings.dto';
+import { NotificationsGateway } from './gateways/notifications.gateway';
 import {
+  Booking,
   BOOKINGS_PACKAGE_NAME,
   BOOKINGS_SERVICE_NAME,
   BookingsServiceClient,
@@ -23,6 +25,8 @@ import {
 export class BookingsService implements OnModuleInit {
   constructor(
     @Inject(BOOKINGS_PACKAGE_NAME) private bookingsClient: ClientGrpc,
+    @Inject('BOOKINGS_SERVICE') private bookingsAsyncClient: ClientProxy,
+    private readonly notificationsGateway: NotificationsGateway,
   ) {}
 
   private bookingService: BookingsServiceClient;
@@ -46,20 +50,15 @@ export class BookingsService implements OnModuleInit {
     throw new InternalServerErrorException(`Failed to ${action}`);
   }
 
-  async create(userId: string, createBookingDto: CreateBookingDto) {
+  create(userId: string, createBookingDto: CreateBookingDto) {
     try {
-      const createResponse = await firstValueFrom(
-        this.bookingService.create({
-          ...createBookingDto,
-          userId,
-          serviceType: ServiceType[createBookingDto.serviceType],
-        }),
-      );
+      this.bookingsAsyncClient.emit('booking.started', {
+        ...createBookingDto,
+        userId,
+        serviceType: ServiceType[createBookingDto.serviceType],
+      });
 
-      return {
-        ...createResponse,
-        serviceType: ServiceType[createResponse.serviceType],
-      };
+      return { started: true };
     } catch (error) {
       this.handleError(error, 'create booking');
     }
@@ -108,5 +107,13 @@ export class BookingsService implements OnModuleInit {
     } catch (error) {
       this.handleError(error, 'fetch booking');
     }
+  }
+
+  handleBookingCompleted(data: Booking) {
+    this.notificationsGateway.emitToUser(
+      data.userId,
+      'booking.completed',
+      data,
+    );
   }
 }

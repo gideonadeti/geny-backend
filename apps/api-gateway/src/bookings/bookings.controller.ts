@@ -1,4 +1,5 @@
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { EventPattern } from '@nestjs/microservices';
 import {
   Controller,
   Get,
@@ -14,9 +15,11 @@ import { CreateBookingDto } from './dtos/create-booking.dto';
 import { FindAllBookingsDto } from './dtos/find-all-bookings.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { UserId } from '../auth/decorators/user-id.decorator';
-import { RolesGuard } from '../guards/roles.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
 import { UserRole } from '@app/protos/generated/auth';
-import { Roles } from '../decorators/roles.decorator';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { Booking } from '@app/protos/generated/bookings';
+import { Public } from '../auth/decorators/public.decorator';
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -38,5 +41,11 @@ export class BookingsController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.bookingsService.findOne(id);
+  }
+
+  @Public()
+  @EventPattern('booking.completed')
+  handleBookingCompleted(data: Booking) {
+    return this.bookingsService.handleBookingCompleted(data);
   }
 }
