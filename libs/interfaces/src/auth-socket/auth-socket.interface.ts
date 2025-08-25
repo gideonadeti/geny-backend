@@ -1,5 +1,5 @@
 import { Socket } from 'socket.io';
 
-export interface WsClient extends Socket {
+export interface AuthSocket extends Socket {
   user: { sub: string };
 }
