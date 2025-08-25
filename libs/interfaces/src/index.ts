@@ -3,3 +3,4 @@ export * from './grpc-error/grpc-error.interface';
 export * from './microservice-error/microservice-error.interface';
 export * from './auth-payload/auth-payload.interface';
 export * from './auth-socket/auth-socket.interface';
+export * from './create-booking-data/create-booking-data.interface';
