@@ -2,9 +2,9 @@ import { Controller } from '@nestjs/common';
 import { EventPattern, GrpcMethod } from '@nestjs/microservices';
 
 import { BookingsService } from './bookings.service';
+import { CreateBookingData } from '@app/interfaces';
 import {
   BOOKINGS_SERVICE_NAME,
-  CreateRequest,
   FindAllRequest,
   FindOneRequest,
 } from '@app/protos/generated/bookings';
@@ -24,7 +24,7 @@ export class BookingsController {
   }
 
   @EventPattern('booking.started')
-  handleBookingStarted(data: CreateRequest) {
+  handleBookingStarted(data: CreateBookingData) {
     return this.bookingsService.handleBookingStarted(data);
   }
 }

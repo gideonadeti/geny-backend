@@ -3,11 +3,8 @@ import { ClientProxy, RpcException } from '@nestjs/microservices';
 
 import { PrismaService } from './prisma/prisma.service';
 import { ServiceType as PrismaServiceType } from '../generated/prisma';
-import {
-  CreateRequest,
-  FindAllRequest,
-  ServiceType,
-} from '@app/protos/generated/bookings';
+import { FindAllRequest, ServiceType } from '@app/protos/generated/bookings';
+import { CreateBookingData } from '@app/interfaces';
 
 @Injectable()
 export class BookingsService {
@@ -105,15 +102,12 @@ export class BookingsService {
     }
   }
 
-  async handleBookingStarted(createRequest: CreateRequest) {
+  async handleBookingStarted(data: CreateBookingData) {
     try {
       const booking = await this.prismaService.booking.create({
         data: {
-          ...createRequest,
-          serviceType: ServiceType[
-            createRequest.serviceType
-          ] as PrismaServiceType,
-          startsAt: createRequest.startsAt as Date,
+          ...data,
+          serviceType: ServiceType[data.serviceType] as PrismaServiceType,
         },
       });
 
