@@ -1,16 +1,20 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
-import { RpcException } from '@nestjs/microservices';
-import { Queue } from 'bullmq';
-import { InjectQueue } from '@nestjs/bullmq';
+import { Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { ClientProxy, RpcException } from '@nestjs/microservices';
 
 import { PrismaService } from './prisma/prisma.service';
-import { CreateRequest, FindAllRequest } from '@app/protos/generated/bookings';
+import { ServiceType as PrismaServiceType } from '../generated/prisma';
+import {
+  CreateRequest,
+  FindAllRequest,
+  ServiceType,
+} from '@app/protos/generated/bookings';
 
 @Injectable()
 export class BookingsService {
   constructor(
     private prismaService: PrismaService,
-    @InjectQueue('bookings') private bookingsQueue: Queue,
+    @Inject('API-GATEWAY_SERVICE')
+    private readonly apiGatewayClient: ClientProxy,
   ) {}
 
   private logger = new Logger(BookingsService.name);
@@ -19,16 +23,6 @@ export class BookingsService {
     this.logger.error(`Failed to ${action}`, (error as Error).stack);
 
     throw new RpcException(JSON.stringify(error));
-  }
-
-  async create(createRequest: CreateRequest) {
-    try {
-      const job = await this.bookingsQueue.add('create', { createRequest });
-
-      return { jobId: job.id };
-    } catch (error) {
-      this.handleError(error, 'create booking');
-    }
   }
 
   async findAll(findAllRequest: FindAllRequest) {
@@ -108,6 +102,24 @@ export class BookingsService {
       return booking;
     } catch (error) {
       this.handleError(error, `fetch booking with id ${id}`);
+    }
+  }
+
+  async handleBookingStarted(createRequest: CreateRequest) {
+    try {
+      const booking = await this.prismaService.booking.create({
+        data: {
+          ...createRequest,
+          serviceType: ServiceType[
+            createRequest.serviceType
+          ] as PrismaServiceType,
+          startsAt: createRequest.startsAt as Date,
+        },
+      });
+
+      this.apiGatewayClient.emit('booking.completed', booking);
+    } catch (error) {
+      this.handleError(error, 'handle booking started event');
     }
   }
 }

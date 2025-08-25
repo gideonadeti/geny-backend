@@ -1,5 +1,5 @@
 import { Controller } from '@nestjs/common';
-import { GrpcMethod } from '@nestjs/microservices';
+import { EventPattern, GrpcMethod } from '@nestjs/microservices';
 
 import { BookingsService } from './bookings.service';
 import {
@@ -14,11 +14,6 @@ export class BookingsController {
   constructor(private readonly bookingsService: BookingsService) {}
 
   @GrpcMethod(BOOKINGS_SERVICE_NAME)
-  create(data: CreateRequest) {
-    return this.bookingsService.create(data);
-  }
-
-  @GrpcMethod(BOOKINGS_SERVICE_NAME)
   findAll(data: FindAllRequest) {
     return this.bookingsService.findAll(data);
   }
@@ -26,5 +21,10 @@ export class BookingsController {
   @GrpcMethod(BOOKINGS_SERVICE_NAME)
   findOne(data: FindOneRequest) {
     return this.bookingsService.findOne(data.id);
+  }
+
+  @EventPattern('booking.started')
+  handleBookingStarted(data: CreateRequest) {
+    return this.bookingsService.handleBookingStarted(data);
   }
 }
