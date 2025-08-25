@@ -4,18 +4,8 @@ import "google/protobuf/timestamp.proto";
 package bookings;
 
 service BookingsService {
-  rpc Create(CreateRequest) returns (Booking) {}
   rpc FindAll(FindAllRequest) returns (FindAllResponse) {}
   rpc FindOne(FindOneRequest) returns (Booking) {}
-}
-
-message CreateRequest {
-  string user_id = 1;
-  string client_name = 2;
-  string client_phone = 3;
-  ServiceType service_type = 4;
-  google.protobuf.Timestamp starts_at = 5;
-  optional string notes = 6;
 }
 
 enum ServiceType {

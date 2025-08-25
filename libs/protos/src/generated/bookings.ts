@@ -18,15 +18,6 @@ export enum ServiceType {
   UNRECOGNIZED = -1,
 }
 
-export interface CreateRequest {
-  userId: string;
-  clientName: string;
-  clientPhone: string;
-  serviceType: ServiceType;
-  startsAt: Date | undefined;
-  notes?: string | undefined;
-}
-
 export interface Booking {
   id: string;
   userId: string;
@@ -79,16 +70,12 @@ wrappers[".google.protobuf.Timestamp"] = {
 } as any;
 
 export interface BookingsServiceClient {
-  create(request: CreateRequest): Observable<Booking>;
-
   findAll(request: FindAllRequest): Observable<FindAllResponse>;
 
   findOne(request: FindOneRequest): Observable<Booking>;
 }
 
 export interface BookingsServiceController {
-  create(request: CreateRequest): Promise<Booking> | Observable<Booking> | Booking;
-
   findAll(request: FindAllRequest): Promise<FindAllResponse> | Observable<FindAllResponse> | FindAllResponse;
 
   findOne(request: FindOneRequest): Promise<Booking> | Observable<Booking> | Booking;
@@ -96,7 +83,7 @@ export interface BookingsServiceController {
 
 export function BookingsServiceControllerMethods() {
   return function (constructor: Function) {
-    const grpcMethods: string[] = ["create", "findAll", "findOne"];
+    const grpcMethods: string[] = ["findAll", "findOne"];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
       GrpcMethod("BookingsService", method)(constructor.prototype[method], method, descriptor);
