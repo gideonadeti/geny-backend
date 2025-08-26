@@ -2,11 +2,13 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { join } from 'path';
+import { BullModule } from '@nestjs/bullmq';
 
 import { BookingsController } from './bookings.controller';
 import { BookingsService } from './bookings.service';
 import { PrismaService } from './prisma/prisma.service';
 import { AUTH_PACKAGE_NAME } from '@app/protos/generated/auth';
+import { RemindersConsumer } from './consumers/reminders.consumer';
 
 @Module({
   imports: [
@@ -39,8 +41,15 @@ import { AUTH_PACKAGE_NAME } from '@app/protos/generated/auth';
         },
       },
     ]),
+    BullModule.forRoot({
+      connection: {
+        host: 'localhost',
+        port: 6379,
+      },
+    }),
+    BullModule.registerQueue({ name: 'reminders' }),
   ],
   controllers: [BookingsController],
-  providers: [BookingsService, PrismaService],
+  providers: [BookingsService, PrismaService, RemindersConsumer],
 })
 export class BookingsModule {}
