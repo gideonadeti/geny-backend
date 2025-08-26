@@ -123,7 +123,7 @@ export class BookingsService {
   async handleSetReminder(data: { userId: string; startsAt: Date }) {
     try {
       const startsAtDate = new Date(data.startsAt);
-      const reminder = startsAtDate.getTime() - 14 * 60 * 1000; // 10 minutes before startsAt
+      const reminder = startsAtDate.getTime() - 10 * 60 * 1000; // 10 minutes before startsAt
       const delay = reminder - Date.now();
 
       await this.remindersQueue.add('send-reminder', data.userId, { delay });
