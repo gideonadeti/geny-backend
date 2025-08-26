@@ -4,6 +4,7 @@ import { join } from 'path';
 
 import { BookingsModule } from './bookings.module';
 import { BOOKINGS_PACKAGE_NAME } from '@app/protos/generated/bookings';
+import { GRPC_HEALTH_V1_PACKAGE_NAME } from '@app/protos/generated/health';
 
 const bootstrap = async () => {
   const grpcApp = await NestFactory.createMicroservice<MicroserviceOptions>(
@@ -11,8 +12,11 @@ const bootstrap = async () => {
     {
       transport: Transport.GRPC,
       options: {
-        package: BOOKINGS_PACKAGE_NAME,
-        protoPath: join(__dirname, '../../libs/protos/bookings.proto'),
+        package: [BOOKINGS_PACKAGE_NAME, GRPC_HEALTH_V1_PACKAGE_NAME],
+        protoPath: [
+          join(__dirname, '../../libs/protos/bookings.proto'),
+          join(__dirname, '../../libs/protos/health.proto'),
+        ],
         url: '0.0.0.0:5001',
       },
     },

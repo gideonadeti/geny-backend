@@ -4,6 +4,7 @@ import { join } from 'path';
 
 import { AuthModule } from './auth.module';
 import { AUTH_PACKAGE_NAME } from '@app/protos/generated/auth';
+import { GRPC_HEALTH_V1_PACKAGE_NAME } from '@app/protos/generated/health';
 
 const bootstrap = async () => {
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(
@@ -11,8 +12,11 @@ const bootstrap = async () => {
     {
       transport: Transport.GRPC,
       options: {
-        package: AUTH_PACKAGE_NAME,
-        protoPath: join(__dirname, '../../libs/protos/auth.proto'),
+        package: [AUTH_PACKAGE_NAME, GRPC_HEALTH_V1_PACKAGE_NAME],
+        protoPath: [
+          join(__dirname, '../../libs/protos/auth.proto'),
+          join(__dirname, '../../libs/protos/health.proto'),
+        ],
         url: '0.0.0.0:5000',
       },
     },

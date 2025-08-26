@@ -9,6 +9,7 @@ import { BookingsService } from './bookings.service';
 import { PrismaService } from './prisma/prisma.service';
 import { AUTH_PACKAGE_NAME } from '@app/protos/generated/auth';
 import { RemindersConsumer } from './consumers/reminders.consumer';
+import { HealthController } from './controllers/health.controller';
 
 @Module({
   imports: [
@@ -49,7 +50,7 @@ import { RemindersConsumer } from './consumers/reminders.consumer';
     }),
     BullModule.registerQueue({ name: 'reminders' }),
   ],
-  controllers: [BookingsController],
+  controllers: [BookingsController, HealthController],
   providers: [BookingsService, PrismaService, RemindersConsumer],
 })
 export class BookingsModule {}
