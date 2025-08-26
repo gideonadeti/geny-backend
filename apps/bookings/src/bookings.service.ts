@@ -1,5 +1,7 @@
 import { Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
+import { InjectQueue } from '@nestjs/bullmq';
+import { Queue } from 'bullmq';
 
 import { PrismaService } from './prisma/prisma.service';
 import { ServiceType as PrismaServiceType } from '../generated/prisma';
@@ -12,6 +14,7 @@ export class BookingsService {
     private prismaService: PrismaService,
     @Inject('API-GATEWAY_SERVICE')
     private readonly apiGatewayClient: ClientProxy,
+    @InjectQueue('reminders') private readonly remindersQueue: Queue,
   ) {}
 
   private logger = new Logger(BookingsService.name);
@@ -114,6 +117,18 @@ export class BookingsService {
       this.apiGatewayClient.emit('create-booking-completed', booking);
     } catch (error) {
       this.handleError(error, 'handle booking started event');
+    }
+  }
+
+  async handleSetReminder(data: { userId: string; startsAt: Date }) {
+    try {
+      const startsAtDate = new Date(data.startsAt);
+      const reminder = startsAtDate.getTime() - 14 * 60 * 1000; // 10 minutes before startsAt
+      const delay = reminder - Date.now();
+
+      await this.remindersQueue.add('send-reminder', data.userId, { delay });
+    } catch (error) {
+      this.handleError(error, 'handle set reminder event');
     }
   }
 }

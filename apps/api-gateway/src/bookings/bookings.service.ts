@@ -115,5 +115,16 @@ export class BookingsService implements OnModuleInit {
       'booking.completed',
       data,
     );
+
+    this.bookingsAsyncClient.emit('set-reminder', {
+      userId: data.userId,
+      startsAt: data.startsAt,
+    });
+  }
+
+  handleSendReminder(data: string) {
+    this.notificationsGateway.emitToUser(data, 'booking.reminder', {
+      message: 'You have a booking starting in 10 minutes',
+    });
   }
 }

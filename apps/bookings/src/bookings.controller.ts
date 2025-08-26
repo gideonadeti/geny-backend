@@ -27,4 +27,9 @@ export class BookingsController {
   handleCreateBooking(data: CreateBookingData) {
     return this.bookingsService.handleCreateBooking(data);
   }
+
+  @EventPattern('set-reminder')
+  handleSetReminder(data: { userId: string; startsAt: Date }) {
+    return this.bookingsService.handleSetReminder(data);
+  }
 }

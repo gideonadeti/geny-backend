@@ -48,4 +48,10 @@ export class BookingsController {
   handleCreateBookingCompleted(data: Booking) {
     return this.bookingsService.handleCreateBookingCompleted(data);
   }
+
+  @Public()
+  @EventPattern('send-reminder')
+  handleSendReminder(data: string) {
+    return this.bookingsService.handleSendReminder(data);
+  }
 }
