@@ -29,11 +29,13 @@ export class BookingsService implements OnModuleInit {
     private readonly notificationsGateway: NotificationsGateway,
   ) {}
 
-  private bookingService: BookingsServiceClient;
+  private bookingsService: BookingsServiceClient;
   private logger = new Logger(BookingsService.name);
 
   onModuleInit() {
-    this.bookingService = this.bookingsClient.getService(BOOKINGS_SERVICE_NAME);
+    this.bookingsService = this.bookingsClient.getService(
+      BOOKINGS_SERVICE_NAME,
+    );
   }
 
   private handleError(error: any, action: string) {
@@ -69,7 +71,7 @@ export class BookingsService implements OnModuleInit {
 
     try {
       const findAllResponse = await firstValueFrom(
-        this.bookingService.findAll({
+        this.bookingsService.findAll({
           ...query,
           userId,
         }),
@@ -97,7 +99,7 @@ export class BookingsService implements OnModuleInit {
   async findOne(id: string) {
     try {
       const findOneResponse = await firstValueFrom(
-        this.bookingService.findOne({ id }),
+        this.bookingsService.findOne({ id }),
       );
 
       return {
