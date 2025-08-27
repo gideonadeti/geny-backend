@@ -22,6 +22,7 @@ describe('ApiGatewayController (e2e)', () => {
   });
 
   it('should sign in an existing user and return tokens', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     const res = await request(app.getHttpServer())
       .post('/auth/sign-in')
       .send({
