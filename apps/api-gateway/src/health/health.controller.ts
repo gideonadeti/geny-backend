@@ -1,9 +1,11 @@
 import { Controller, Get } from '@nestjs/common';
-import { GrpcOptions } from '@nestjs/microservices';
+import { GrpcOptions, Transport, RedisOptions } from '@nestjs/microservices';
+import { ConfigService } from '@nestjs/config';
 import {
   HealthCheck,
   HealthCheckService,
   GRPCHealthIndicator,
+  MicroserviceHealthIndicator,
 } from '@nestjs/terminus';
 
 import {
@@ -14,13 +16,13 @@ import {
   BOOKINGS_PACKAGE_NAME,
   BOOKINGS_SERVICE_NAME,
 } from '@app/protos/generated/bookings';
-import { ConfigService } from '@nestjs/config';
 
 @Controller('health')
 export class HealthController {
   constructor(
     private readonly health: HealthCheckService,
     private readonly grpc: GRPCHealthIndicator,
+    private readonly microservice: MicroserviceHealthIndicator,
     private readonly configService: ConfigService,
   ) {}
 
@@ -44,6 +46,14 @@ export class HealthController {
             url: this.configService.get<string>('BOOKINGS_SERVICE_URL'),
           },
         ),
+      async () =>
+        this.microservice.pingCheck<RedisOptions>('redis', {
+          transport: Transport.REDIS,
+          options: {
+            host: 'localhost',
+            port: 6379,
+          },
+        }),
     ]);
   }
 }
