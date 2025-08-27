@@ -1,6 +1,7 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, UseGuards } from '@nestjs/common';
 import { GrpcOptions, Transport, RedisOptions } from '@nestjs/microservices';
 import { ConfigService } from '@nestjs/config';
+import { ApiBearerAuth } from '@nestjs/swagger';
 import {
   HealthCheck,
   HealthCheckService,
@@ -8,15 +9,22 @@ import {
   MicroserviceHealthIndicator,
 } from '@nestjs/terminus';
 
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
 import {
   AUTH_PACKAGE_NAME,
   AUTH_SERVICE_NAME,
+  UserRole,
 } from '@app/protos/generated/auth';
 import {
   BOOKINGS_PACKAGE_NAME,
   BOOKINGS_SERVICE_NAME,
 } from '@app/protos/generated/bookings';
 
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(UserRole.ADMIN)
 @Controller('health')
 export class HealthController {
   constructor(
