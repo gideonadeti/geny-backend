@@ -182,4 +182,16 @@ export class AuthService {
       this.handleError(error, 'validate token');
     }
   }
+
+  async findProvidersCount() {
+    try {
+      const providersCount = await this.prismaService.user.count({
+        where: { role: 'PROVIDER' },
+      });
+
+      return { providersCount };
+    } catch (error) {
+      this.handleError(error, 'find providers count');
+    }
+  }
 }

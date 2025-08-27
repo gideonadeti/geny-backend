@@ -23,6 +23,11 @@ export class BookingsController {
     return this.bookingsService.findOne(data.id);
   }
 
+  @GrpcMethod(BOOKINGS_SERVICE_NAME)
+  findBookingsCount() {
+    return this.bookingsService.findBookingsCount();
+  }
+
   @EventPattern('create-booking')
   handleCreateBooking(data: CreateBookingData) {
     return this.bookingsService.handleCreateBooking(data);

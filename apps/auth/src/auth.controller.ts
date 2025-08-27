@@ -45,4 +45,9 @@ export class AuthController {
   validateToken(data: ValidateTokenRequest) {
     return this.authService.validateToken(data);
   }
+
+  @GrpcMethod(AUTH_SERVICE_NAME)
+  findProvidersCount() {
+    return this.authService.findProvidersCount();
+  }
 }

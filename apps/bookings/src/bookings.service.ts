@@ -105,6 +105,16 @@ export class BookingsService {
     }
   }
 
+  async findBookingsCount() {
+    try {
+      const bookingsCount = await this.prismaService.booking.count();
+
+      return { bookingsCount };
+    } catch (error) {
+      this.handleError(error, 'find bookings count');
+    }
+  }
+
   async handleCreateBooking(data: CreateBookingData) {
     try {
       const booking = await this.prismaService.booking.create({
