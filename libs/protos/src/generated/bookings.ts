@@ -58,6 +58,13 @@ export interface FindOneResponse {
   booking: Booking | undefined;
 }
 
+export interface Empty {
+}
+
+export interface FindBookingsCountResponse {
+  bookingsCount: number;
+}
+
 export const BOOKINGS_PACKAGE_NAME = "bookings";
 
 wrappers[".google.protobuf.Timestamp"] = {
@@ -73,17 +80,23 @@ export interface BookingsServiceClient {
   findAll(request: FindAllRequest): Observable<FindAllResponse>;
 
   findOne(request: FindOneRequest): Observable<Booking>;
+
+  findBookingsCount(request: Empty): Observable<FindBookingsCountResponse>;
 }
 
 export interface BookingsServiceController {
   findAll(request: FindAllRequest): Promise<FindAllResponse> | Observable<FindAllResponse> | FindAllResponse;
 
   findOne(request: FindOneRequest): Promise<Booking> | Observable<Booking> | Booking;
+
+  findBookingsCount(
+    request: Empty,
+  ): Promise<FindBookingsCountResponse> | Observable<FindBookingsCountResponse> | FindBookingsCountResponse;
 }
 
 export function BookingsServiceControllerMethods() {
   return function (constructor: Function) {
-    const grpcMethods: string[] = ["findAll", "findOne"];
+    const grpcMethods: string[] = ["findAll", "findOne", "findBookingsCount"];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
       GrpcMethod("BookingsService", method)(constructor.prototype[method], method, descriptor);

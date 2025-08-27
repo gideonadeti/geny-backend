@@ -73,6 +73,13 @@ export interface ValidateTokenResponse {
   sub: string;
 }
 
+export interface Empty {
+}
+
+export interface FindProvidersCountResponse {
+  providersCount: number;
+}
+
 export const AUTH_PACKAGE_NAME = "auth";
 
 wrappers[".google.protobuf.Timestamp"] = {
@@ -96,6 +103,8 @@ export interface AuthServiceClient {
   signOut(request: SignOutRequest): Observable<SignOutResponse>;
 
   validateToken(request: ValidateTokenRequest): Observable<ValidateTokenResponse>;
+
+  findProvidersCount(request: Empty): Observable<FindProvidersCountResponse>;
 }
 
 export interface AuthServiceController {
@@ -114,11 +123,23 @@ export interface AuthServiceController {
   validateToken(
     request: ValidateTokenRequest,
   ): Promise<ValidateTokenResponse> | Observable<ValidateTokenResponse> | ValidateTokenResponse;
+
+  findProvidersCount(
+    request: Empty,
+  ): Promise<FindProvidersCountResponse> | Observable<FindProvidersCountResponse> | FindProvidersCountResponse;
 }
 
 export function AuthServiceControllerMethods() {
   return function (constructor: Function) {
-    const grpcMethods: string[] = ["signUp", "validateUser", "signIn", "refreshToken", "signOut", "validateToken"];
+    const grpcMethods: string[] = [
+      "signUp",
+      "validateUser",
+      "signIn",
+      "refreshToken",
+      "signOut",
+      "validateToken",
+      "findProvidersCount",
+    ];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
       GrpcMethod("AuthService", method)(constructor.prototype[method], method, descriptor);

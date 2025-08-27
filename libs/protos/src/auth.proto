@@ -11,6 +11,7 @@ service AuthService {
   rpc RefreshToken(RefreshTokenRequest) returns (RefreshTokenResponse) {}
   rpc SignOut(SignOutRequest) returns (SignOutResponse) {}
   rpc ValidateToken(ValidateTokenRequest) returns (ValidateTokenResponse) {}
+  rpc FindProvidersCount(Empty) returns (FindProvidersCountResponse) {}
 }
 
 message SignUpRequest {
@@ -65,3 +66,7 @@ message SignOutResponse {
 message ValidateTokenRequest { string token = 1; }
 
 message ValidateTokenResponse { string sub = 1; }
+
+message Empty {}
+
+message FindProvidersCountResponse { int32 providers_count = 1; }

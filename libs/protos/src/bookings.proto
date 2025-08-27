@@ -6,6 +6,7 @@ package bookings;
 service BookingsService {
   rpc FindAll(FindAllRequest) returns (FindAllResponse) {}
   rpc FindOne(FindOneRequest) returns (Booking) {}
+  rpc FindBookingsCount(Empty) returns (FindBookingsCountResponse) {}
 }
 
 enum ServiceType {
@@ -49,3 +50,7 @@ message Meta {
 message FindOneRequest { string id = 1; }
 
 message FindOneResponse { Booking booking = 1; }
+
+message Empty {}
+
+message FindBookingsCountResponse { int32 bookings_count = 1; }
