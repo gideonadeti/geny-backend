@@ -1,6 +1,7 @@
+import * as request from 'supertest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import * as request from 'supertest';
+
 import { ApiGatewayModule } from './../src/api-gateway.module';
 
 describe('ApiGatewayController (e2e)', () => {
@@ -12,13 +13,24 @@ describe('ApiGatewayController (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
+
     await app.init();
   });
 
-  it('/ (GET)', () => {
-    return request(app.getHttpServer())
-      .get('/')
-      .expect(200)
-      .expect('Hello World!');
+  afterAll(async () => {
+    await app.close();
+  });
+
+  it('should sign in an existing user and return tokens', async () => {
+    const res = await request(app.getHttpServer())
+      .post('/auth/sign-in')
+      .send({
+        email: 'fortor@gmail.com',
+        password: 'Family?',
+      })
+      .expect(201);
+
+    expect(res.body).toHaveProperty('accessToken');
+    expect(res.body).toHaveProperty('user');
   });
 });
