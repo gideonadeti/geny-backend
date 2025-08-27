@@ -4,8 +4,8 @@ import { JwtModule } from '@nestjs/jwt';
 
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { PrismaService } from './prisma/prisma.service';
-import { HealthController } from './controllers/health.controller';
+import { HealthModule } from './health/health.module';
+import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
   imports: [
@@ -21,8 +21,10 @@ import { HealthController } from './controllers/health.controller';
       }),
       inject: [ConfigService],
     }),
+    HealthModule,
+    PrismaModule,
   ],
-  controllers: [AuthController, HealthController],
-  providers: [AuthService, PrismaService],
+  controllers: [AuthController],
+  providers: [AuthService],
 })
 export class AuthModule {}

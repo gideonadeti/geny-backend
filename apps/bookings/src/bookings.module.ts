@@ -6,10 +6,10 @@ import { BullModule } from '@nestjs/bullmq';
 
 import { BookingsController } from './bookings.controller';
 import { BookingsService } from './bookings.service';
-import { PrismaService } from './prisma/prisma.service';
 import { AUTH_PACKAGE_NAME } from '@app/protos/generated/auth';
 import { RemindersConsumer } from './consumers/reminders.consumer';
-import { HealthController } from './controllers/health.controller';
+import { HealthModule } from './health/health.module';
+import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
   imports: [
@@ -49,8 +49,10 @@ import { HealthController } from './controllers/health.controller';
       },
     }),
     BullModule.registerQueue({ name: 'reminders' }),
+    HealthModule,
+    PrismaModule,
   ],
-  controllers: [BookingsController, HealthController],
-  providers: [BookingsService, PrismaService, RemindersConsumer],
+  controllers: [BookingsController],
+  providers: [BookingsService, RemindersConsumer],
 })
 export class BookingsModule {}
