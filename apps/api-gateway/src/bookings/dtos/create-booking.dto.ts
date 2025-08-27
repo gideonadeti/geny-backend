@@ -1,3 +1,4 @@
+import { Type } from 'class-transformer';
 import {
   Length,
   IsString,
@@ -10,8 +11,12 @@ import {
 } from 'class-validator';
 
 import { LeadTimeValidator } from '../validators/lead-time-validator';
-import { ServiceType } from 'apps/bookings/generated/prisma';
-import { Type } from 'class-transformer';
+
+enum ServiceType {
+  MANICURE = 'MANICURE',
+  PEDICURE = 'PEDICURE',
+  HAIRCUT = 'HAIRCUT',
+}
 
 export class CreateBookingDto {
   /**
