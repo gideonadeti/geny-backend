@@ -20,7 +20,7 @@ import { AUTH_PACKAGE_NAME } from '@app/protos/generated/auth';
           transport: Transport.GRPC,
           options: {
             package: AUTH_PACKAGE_NAME,
-            protoPath: join(__dirname, '../../libs/protos/auth.proto'),
+            protoPath: join(process.cwd(), 'libs/protos/src/auth.proto'),
             url: configService.get<string>('AUTH_SERVICE_URL'),
           },
         }),
