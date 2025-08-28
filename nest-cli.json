@@ -60,11 +60,7 @@
       "entryFile": "index",
       "sourceRoot": "libs/protos/src",
       "compilerOptions": {
-        "tsConfigPath": "libs/protos/tsconfig.lib.json",
-        "assets": [
-          "**/*.proto"
-        ],
-        "watchAssets": true
+        "tsConfigPath": "libs/protos/tsconfig.lib.json"
       }
     }
   }
