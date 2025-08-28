@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { BullModule } from '@nestjs/bullmq';
 
@@ -15,21 +15,29 @@ import { PrismaModule } from './prisma/prisma.module';
       isGlobal: true,
       envFilePath: 'apps/bookings/.env',
     }),
-    ClientsModule.register([
+    ClientsModule.registerAsync([
       {
+        imports: [ConfigModule],
         name: 'API-GATEWAY_SERVICE',
-        transport: Transport.REDIS,
-        options: {
-          host: 'redis',
-          port: 6379,
-        },
+        useFactory: (configService: ConfigService) => ({
+          transport: Transport.REDIS,
+          options: {
+            host: configService.get<string>('REDIS_HOST', 'redis'),
+            port: parseInt(configService.get<string>('REDIS_PORT', '6379'), 10),
+          },
+        }),
+        inject: [ConfigService],
       },
     ]),
-    BullModule.forRoot({
-      connection: {
-        host: 'redis',
-        port: 6379,
-      },
+    BullModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        connection: {
+          host: configService.get<string>('REDIS_HOST', 'redis'),
+          port: parseInt(configService.get<string>('REDIS_PORT', '6379'), 10),
+        },
+      }),
+      inject: [ConfigService],
     }),
     BullModule.registerQueue({ name: 'reminders' }),
     HealthModule,

@@ -41,14 +41,18 @@ import { AUTH_PACKAGE_NAME } from '@app/protos/generated/auth';
         inject: [ConfigService],
       },
     ]),
-    ClientsModule.register([
+    ClientsModule.registerAsync([
       {
+        imports: [ConfigModule],
         name: 'BOOKINGS_SERVICE',
-        transport: Transport.REDIS,
-        options: {
-          host: 'redis',
-          port: 6379,
-        },
+        useFactory: (configService: ConfigService) => ({
+          transport: Transport.REDIS,
+          options: {
+            host: configService.get<string>('REDIS_HOST', 'redis'),
+            port: parseInt(configService.get<string>('REDIS_PORT', '6379'), 10),
+          },
+        }),
+        inject: [ConfigService],
       },
     ]),
   ],

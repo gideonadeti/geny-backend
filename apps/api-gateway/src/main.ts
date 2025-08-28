@@ -2,6 +2,7 @@ import * as cookieParser from 'cookie-parser';
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { ConfigService } from '@nestjs/config';
 import {
   DocumentBuilder,
   SwaggerDocumentOptions,
@@ -12,12 +13,13 @@ import { ApiGatewayModule } from './api-gateway.module';
 
 const bootstrap = async () => {
   const app = await NestFactory.create(ApiGatewayModule);
+  const configService = app.get(ConfigService);
 
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.REDIS,
     options: {
-      host: 'redis',
-      port: 6379,
+      host: configService.get<string>('REDIS_HOST', 'redis'),
+      port: parseInt(configService.get<string>('REDIS_PORT', '6379'), 10),
     },
   });
 
