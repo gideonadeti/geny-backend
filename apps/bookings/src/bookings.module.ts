@@ -37,14 +37,14 @@ import { PrismaModule } from './prisma/prisma.module';
         name: 'API-GATEWAY_SERVICE',
         transport: Transport.REDIS,
         options: {
-          host: 'localhost',
+          host: 'redis',
           port: 6379,
         },
       },
     ]),
     BullModule.forRoot({
       connection: {
-        host: 'localhost',
+        host: 'redis',
         port: 6379,
       },
     }),

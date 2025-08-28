@@ -46,7 +46,7 @@ import { AUTH_PACKAGE_NAME } from '@app/protos/generated/auth';
         name: 'BOOKINGS_SERVICE',
         transport: Transport.REDIS,
         options: {
-          host: 'localhost',
+          host: 'redis',
           port: 6379,
         },
       },

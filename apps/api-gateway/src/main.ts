@@ -16,7 +16,7 @@ const bootstrap = async () => {
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.REDIS,
     options: {
-      host: 'localhost',
+      host: 'redis',
       port: 6379,
     },
   });

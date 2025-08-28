@@ -58,7 +58,7 @@ export class HealthController {
         this.microservice.pingCheck<RedisOptions>('redis', {
           transport: Transport.REDIS,
           options: {
-            host: 'localhost',
+            host: 'redis',
             port: 6379,
           },
         }),
