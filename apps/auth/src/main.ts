@@ -14,8 +14,8 @@ const bootstrap = async () => {
       options: {
         package: [AUTH_PACKAGE_NAME, GRPC_HEALTH_V1_PACKAGE_NAME],
         protoPath: [
-          join(__dirname, '../../libs/protos/auth.proto'),
-          join(__dirname, '../../libs/protos/health.proto'),
+          join(process.cwd(), 'libs/protos/src/auth.proto'),
+          join(process.cwd(), 'libs/protos/src/health.proto'),
         ],
         url: '0.0.0.0:5000',
       },
