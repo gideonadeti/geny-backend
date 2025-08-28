@@ -38,7 +38,7 @@ ENV NODE_ENV=${NODE_ENV}
 COPY --from=build /app/dist dist
 
 # Copy .proto files
-COPY --from=build /app/libs/protos/src/*.proto dist/libs/protos/
+COPY --from=build /app/libs/protos/src/*.proto libs/protos/src/
 
 # Copy Prisma client
 COPY --from=build /app/apps/auth/generated apps/auth/generated
