@@ -1,12 +1,12 @@
 {
   "moduleFileExtensions": ["js", "json", "ts"],
-  "rootDir": ".",
+  "rootDir": "../../../",
   "testEnvironment": "node",
-  "testRegex": ".e2e-spec.ts$",
+  "testMatch": ["<rootDir>/apps/api-gateway/test/**/*.e2e-spec.ts"],
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
   },
   "moduleNameMapper": {
-    "^@app/protos/(.*)$": "<rootDir>/../../../libs/protos/src/$1"
+    "^@app/protos/(.*)$": "<rootDir>/libs/protos/src/$1"
   }
 }
