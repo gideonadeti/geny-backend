@@ -19,7 +19,7 @@ import { AUTH_PACKAGE_NAME } from '@app/protos/generated/auth';
           transport: Transport.GRPC,
           options: {
             package: BOOKINGS_PACKAGE_NAME,
-            protoPath: join(process.cwd(), 'libs/protos/src/bookings.proto'),
+            protoPath: join(__dirname, '../../libs/protos/bookings.proto'),
             url: configService.get('BOOKINGS_SERVICE_URL') as string,
           },
         }),
@@ -34,7 +34,7 @@ import { AUTH_PACKAGE_NAME } from '@app/protos/generated/auth';
           transport: Transport.GRPC,
           options: {
             package: AUTH_PACKAGE_NAME,
-            protoPath: join(process.cwd(), 'libs/protos/src/auth.proto'),
+            protoPath: join(__dirname, '../../libs/protos/auth.proto'),
             url: configService.get<string>('AUTH_SERVICE_URL'),
           },
         }),
