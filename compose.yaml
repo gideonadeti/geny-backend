@@ -1,4 +1,35 @@
 services:
+  # build-base-image:
+  #   container_name: build-base-image
+
+  # prod-base-image:
+  #   container_name: prod-base-image
+
+  api-gateway:
+    container_name: api-gateway
+    volumes:
+      - ./.env:/app/apps/api-gateway/.env
+    depends_on:
+      - auth
+      - bookings
+      - redis
+    ports:
+      - '3000:3000'
+
+  auth:
+    container_name: auth
+    volumes:
+      - ./.env:/app/apps/auth/.env
+    depends_on:
+      - auth_db
+
+  bookings:
+    container_name: bookings
+    volumes:
+      - ./.env:/app/apps/bookings/.env
+    depends_on:
+      - bookings_db
+
   auth_db:
     container_name: auth_db
     image: postgres
