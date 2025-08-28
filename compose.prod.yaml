@@ -1,0 +1,9 @@
+services:
+  api-gateway:
+    image: ghcr.io/gideonadeti/geny-backend-api-gateway:latest
+
+  auth:
+    image: ghcr.io/gideonadeti/geny-backend-auth:latest
+
+  bookings:
+    image: ghcr.io/gideonadeti/geny-backend-bookings:latest

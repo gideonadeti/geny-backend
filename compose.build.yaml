@@ -1,0 +1,24 @@
+services:
+  # build-base-image:
+  #   build:
+  #     context: .
+  #     dockerfile: apps/base-images/Dockerfile.build
+
+  # prod-base-image:
+  #   build:
+  #     context: .
+  #     dockerfile: apps/base-images/Dockerfile.prod
+
+  api-gateway:
+    build:
+      context: .
+      dockerfile: apps/api-gateway/Dockerfile
+
+  auth:
+    build:
+      context: .
+      dockerfile: apps/auth/Dockerfile
+  bookings:
+    build:
+      context: .
+      dockerfile: apps/bookings/Dockerfile
